@@ -2,6 +2,7 @@
 *.obb
 *.csv
 *.txt
+*.json
 avatar/
 Chart_EZ/
 Chart_HD/
