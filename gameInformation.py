@@ -4,6 +4,11 @@ import sys
 from UnityPy import Environment
 import zipfile
 
+SONG_BASE_SCHEMA = {
+    "songId": str, "songKey": str, "songName": str, "songTitle": str, "difficulty": [float],
+    "illustrator": str, "charter": [str], "composer": str, "levels": [str], "previewTimeFrom": float, "previewTimeTo": float,
+    "unlockList": {"unlockType": int, "unlockInfo": [str]}, "levelMods": {"n": [str]}
+}
 
 class ByteReader:
     def __init__(self, data: bytes):
@@ -11,29 +16,32 @@ class ByteReader:
         self.position = 0
         self.d = {int: self.readInt, float: self.readFloat, str: self.readString}
 
+    # 4字节读取数据(int)
     def readInt(self):
         self.position += 4
         return self.data[self.position - 4] ^ self.data[self.position - 3] << 8
 
+    # 4字节读取数据(float)
     def readFloat(self):
         self.position += 4
         return struct.unpack("f", self.data[self.position - 4:self.position])[0]
 
+    # 读取字符串
     def readString(self):
-        length = self.readInt()
+        length = self.readInt() # 读取第一个字节获取当前字符串长度
         result = self.data[self.position:self.position + length].decode()
         self.position += length // 4 * 4
         if length % 4 != 0:
             self.position += 4
         return result
 
-    def skipString(self):
+    def skipString(self): # 略过字符串
         length = self.readInt()
         self.position += length // 4 * 4
         if length % 4 != 0:
             self.position += 4
 
-    def readSchema(self, schema: dict):
+    def readSchema(self, schema: dict): # 通过SONG_BASE_SCHEMA终的字典来获取数据类型
         result = []
         for x in range(self.readInt()):
             item = {}
@@ -76,13 +84,10 @@ def run(path):
 
     reader = ByteReader(information)
     reader.position = information.index(b"\x16\x00\x00\x00Glaciaxion.SunsetRay.0\x00\x00\n") - 4
-    songBase_schema = {"songId": str, "songKey": str, "songName": str, "songTitle": str, "difficulty": [float],
-                       "illustrator": str, "charter": [str], "composer": str, "levels": [str], "previewTime": float,
-                       "unlockList": {"unlockType": int, "unlockInfo": [str]}, "levelMods": {"n": [str]}}
     difficulty = []
     table = []
     for i in range(3):
-        for item in reader.readSchema(songBase_schema):
+        for item in reader.readSchema(SONG_BASE_SCHEMA):
             item["songId"] = item["songId"][:-2]
             if len(item["levels"]) == 5:
                 item["difficulty"].pop()
@@ -94,7 +99,7 @@ def run(path):
                 item["difficulty"][i] = round(item["difficulty"][i], 1)
             difficulty.append([item["songId"]] + item["difficulty"])
             table.append((item["songId"], item["songName"], item["composer"], item["illustrator"], *item["charter"]))
-    reader.readSchema(songBase_schema)
+    reader.readSchema(SONG_BASE_SCHEMA)
 
     print(difficulty)
     print(table)
