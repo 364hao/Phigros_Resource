@@ -1,6 +1,7 @@
 *.apk
 *.obb
 *.csv
+*.tsv
 *.txt
 *.json
 avatar/
