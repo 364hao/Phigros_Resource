@@ -172,6 +172,9 @@ def run(path):
         for key, value in D.items():
             data[key] = [value[0], value[1]]
         f.write(json.dumps(data, ensure_ascii=False, indent=2))
+    with open("collection.tsv", "w", encoding="utf8") as f:
+        for key, value in D.items():
+            f.write("%s\t%s\t%s\n" % (key, value[0], value[1]))
     print("collection write completed")
 
     avatar_schema = {1: (int, int, int, str, int, str), "id": str, "file": str}
