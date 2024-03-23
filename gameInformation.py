@@ -179,7 +179,7 @@ def run(path):
             f.write(item["id"])
             f.write("\n")
     print("avatar write completed")
-    with open("tmp.tsv", "w") as f:
+    with open("tmp.tsv", "w", encoding="utf8") as f:
         for item in table:
             f.write("%s\t%s\n" % (item["id"], item["file"][7:]))
     print("tmp write completed")
