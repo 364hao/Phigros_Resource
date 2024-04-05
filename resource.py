@@ -166,7 +166,7 @@ def run(path, c):
     global avatar
     if config["avatar"]:
         avatar = {}
-        with open("tmp.tsv") as f:
+        with open("tmp.tsv", encoding="utf8") as f:
             line = f.readline()[:-1]
             while line:
                 l = line.split("\t")
