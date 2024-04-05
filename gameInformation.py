@@ -139,7 +139,7 @@ def run(path):
             f.write("\t".join(item))
             f.write("\n")
     print("info write completed")
-            
+    
     key_schema = {"key": str, "a": int, "type": int, "b": int}
     single = []
     illustration = []
