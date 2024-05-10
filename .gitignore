@@ -4,6 +4,7 @@
 *.tsv
 *.txt
 *.json
+temp/
 avatar/
 Chart_EZ/
 Chart_HD/

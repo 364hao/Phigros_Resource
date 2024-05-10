@@ -172,7 +172,7 @@ def run(path):
             f.write("%s\t%s\t%s\n" % (key, value[0], value[1]))
     print("collection write completed")
 
-    avatar_schema = {1: (int, int, int, str, int, str), "id": str, "file": str}
+    avatar_schema = {1: (int, int, int, str, str, str), "id": str, "file": str}
     table = reader.readSchema(avatar_schema)
     with open("avatar.txt", "w", encoding="utf8") as f:
         for item in table:
