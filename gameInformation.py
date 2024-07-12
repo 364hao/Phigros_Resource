@@ -7,12 +7,13 @@ import zipfile
 SONG_BASE_SCHEMA = {
     "songId": str, "songKey": str, "songName": str, "songTitle": str, "difficulty": [float],
     "illustrator": str, "charter": [str], "composer": str, "levels": [str], "previewTimeFrom": float, "previewTimeTo": float,
-    "unlockList": {"unlockType": int, "unlockInfo": [str]}, "levelMods": {"n": [str]}
+    "unlockList": {"unlockType": int, "unlockInfo": [str]}, "isCnLimited": int, "levelMods": {"n": [str]}
 }
 
 class ByteReader:
     def __init__(self, data: bytes):
         self.data = data
+        # self.debug = False
         self.position = 0
         self.d = {int: self.readInt, float: self.readFloat, str: self.readString}
 
@@ -22,7 +23,7 @@ class ByteReader:
         return self.data[self.position - 4] ^ self.data[self.position - 3] << 8
 
     # 4字节读取数据(float)
-    def readFloat(self):
+    def readFloat(self, debug = False):
         self.position += 4
         return struct.unpack("f", self.data[self.position - 4:self.position])[0]
 
@@ -83,6 +84,11 @@ def run(path):
             tips = data.raw_data.tobytes()
 
     reader = ByteReader(information)
+    
+    # debug
+    # with open("temp/binary_file.bin", 'wb') as file:
+    #     file.write(reader.data)
+        
     reader.position = information.index(b"\x16\x00\x00\x00Glaciaxion.SunsetRay.0\x00\x00\n") - 4
     difficulty = []
     table = []
