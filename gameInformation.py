@@ -23,7 +23,7 @@ class ByteReader:
         return self.data[self.position - 4] ^ self.data[self.position - 3] << 8
 
     # 4字节读取数据(float)
-    def readFloat(self, debug = False):
+    def readFloat(self):
         self.position += 4
         return struct.unpack("f", self.data[self.position - 4:self.position])[0]
 
