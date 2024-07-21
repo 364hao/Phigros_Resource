@@ -1,6 +1,8 @@
 # Phigros_Resource
 本项目可从Phigros的apk文件获取资源
 
+**※ 注意事项: 请确保自己的Phigros是最新最热的,没有对旧版本的Phigros进行解析与处理**
+
 资源包括
 
 定数，收藏品id对应中文标题，头像id，tips
@@ -11,7 +13,10 @@
 
 生成适配Phira的pez自制谱文件
 
-※ 注意事项: 请确保自己的Phigros是最新最热的,没有对旧版本的Phigros进行解析与处理
+3.7.1版本由于テリトリーバトル - ツユ仍未完全删除，运行phira.py时报错
+
+将difficulty.tsv和info.tsv中曲目相关一行删除即可
+
 # 介绍
 
 `gameInformation.py`可从apk获取定数表，tips，收藏品id，头像id，曲id，曲名，曲师，画师，谱师
@@ -31,11 +36,8 @@ illustrationLowRes = true
 illustration = true
 music = true
 [UPDATE]
-# 主线
 main_story = 0
-# 单曲和合集
 other_song = 0
-# 支线
 side_story = 0
 ```
 TYPES section为设定你需要哪些种类的资源，见README.md开头
@@ -44,20 +46,22 @@ TYPES section为设定你需要哪些种类的资源，见README.md开头
 
 当UPDATE section不是全为0时，会通过difficulty.tsv获取最近的歌曲，当Phigros更新时使用，更新了哪个部分，更新了几首，运行resource.py时只会提取最近几首的资源
 # 使用示例
-taptap下载的apk
+Taptap下载的apk
 ```shell
-pip3 install UnityPy,fsb5
 git clone --depth 1 https://github.com/3035936740/Phigros_Resource
 cd PhigrosLibrary_Resource
+pip3 install -r requirements.txt
 python3 gameInformation.py Phigros.apk
 python3 resource.py Phigros.apk
 ```
 [Google play](https://play.google.com/store/apps/details?id=com.PigeonGames.Phigros)下载的apk和obb
 ```shell
-pip3 install UnityPy,fsb5
 git clone --depth 1 https://github.com/3035936740/Phigros_Resource
 cd PhigrosLibrary_Resource
+pip3 install -r requirements.txt
 python3 gameInformation.py Phigros.apk
 python3 resource.py Phigros.obb
 ```
-生成自制谱文件`python3 phira.py`
+生成自制谱文件
+
+`python3 phira.py`

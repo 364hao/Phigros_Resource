@@ -1,22 +1,25 @@
 import base64
-from concurrent.futures import ThreadPoolExecutor
-from configparser import ConfigParser
 import gc
-from io import BytesIO
 import json
 import os
-from queue import Queue
 import shutil
 import sys
 import threading
 import time
+
+from concurrent.futures import ThreadPoolExecutor
+from configparser import ConfigParser
+from io import BytesIO
+from queue import Queue
+from zipfile import ZipFile
+
 from UnityPy import Environment
 from UnityPy.classes import AudioClip
 from UnityPy.enums import ClassIDType
-from zipfile import ZipFile
 
 from fsb5 import FSB5
 
+from rich.progress import track
 
 class ByteReader:
     def __init__(self, data):
@@ -64,18 +67,14 @@ def io():
 
 def save_image(path, image):
     bytesIO = BytesIO()
-    t1 = time.time()
     image.save(bytesIO, "png")
-    print("%f秒" % round(time.time() - t1, 4))
     queue_in.put((path, bytesIO))
 
 
 def save_music(path, music: AudioClip):
-    t1 = time.time()
     fsb = FSB5(music.m_AudioData)
     rebuilt_sample = fsb.rebuild_sample(fsb.samples[0])
     queue_in.put((path, rebuilt_sample))
-    print("%f秒" % round(time.time() - t1, 4))
 
 
 classes = ClassIDType.TextAsset, ClassIDType.Sprite, ClassIDType.AudioClip
@@ -160,8 +159,6 @@ def run(path, c):
             del table[i]
         elif table[i][0][:14] == "Assets/Tracks/":
             table[i][0] = table[i][0][14:]
-    for key, value in table:
-        print(key, value)
 
     global avatar
     if config["avatar"]:
@@ -183,11 +180,10 @@ def run(path, c):
             with ZipFile(path) as apk:
                 size = 0
                 l = [apk]
-                for key, entry in table:
+                for key, entry in track(table, description = "提取中..."):
                     l.append((key, entry))
                     info = apk.getinfo("assets/aa/Android/%s" % entry)
                     size += info.file_size
-                    print(size)
                     if size > 32 * 1024 * 1024:
                         queue_in.put(l)
                         env = queue_out.get()
@@ -199,7 +195,7 @@ def run(path, c):
                         l = [apk]
                 queue_in.put(l)
                 env = queue_out.get()
-                for ikey, ientry in env.files.items():
+                for ikey, ientry in track(env.files.items(), description = "处理剩余数据中..."):
                     save(ikey, ientry)
         else:
             l = []
@@ -213,10 +209,9 @@ def run(path, c):
             del l[index2:len(l) - update.getint("side_story")]
             del l[index1:index2 - update.getint("other_song")]
             del l[:index1 - update.getint("main_story")]
-            print(l)
             env = Environment()
             with ZipFile(path) as apk:
-                for key, entry in table:
+                for key, entry in track(table, description = "提取中..."):
                     if key[:7] == "avatar.":
                         env.load_file(apk.read("assets/aa/Android/%s" % entry), name=key)
                         continue
@@ -225,11 +220,9 @@ def run(path, c):
                             env.load_file(apk.read("assets/aa/Android/%s" % entry), name=key)
                             break
             for ikey, ientry in env.files.items():
-                # print(ikey, ientry)
                 save(ikey, ientry)
     queue_in.put(None)
     thread.join()
-    print("%f秒" % round(time.time() - ti, 4))
 
 
 if __name__ == "__main__":

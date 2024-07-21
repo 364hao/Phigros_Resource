@@ -13,7 +13,6 @@ SONG_BASE_SCHEMA = {
 class ByteReader:
     def __init__(self, data: bytes):
         self.data = data
-        # self.debug = False
         self.position = 0
         self.d = {int: self.readInt, float: self.readFloat, str: self.readString}
 
@@ -84,10 +83,6 @@ def run(path):
             tips = data.raw_data.tobytes()
 
     reader = ByteReader(information)
-    
-    # debug
-    # with open("temp/binary_file.bin", 'wb') as file:
-    #     file.write(reader.data)
         
     reader.position = information.index(b"\x16\x00\x00\x00Glaciaxion.SunsetRay.0\x00\x00\n") - 4
     difficulty = []
@@ -125,7 +120,6 @@ def run(path):
                 }
                 modifyItem["chartDetail"]["levelList"].append(level)
             
-            print(sid)
             musicInfos.append(modifyItem)
     reader.readSchema(SONG_BASE_SCHEMA)
     print("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
