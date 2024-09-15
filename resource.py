@@ -226,7 +226,6 @@ def run(path, c):
 
 
 if __name__ == "__main__":
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
     c = ConfigParser()
     c.read("config.ini", "utf8")
     types = c["TYPES"]
