@@ -113,7 +113,7 @@ def run(path, c):
     global config
     config = c
     if os.path.isdir(path):
-        path = max([for obb in os.listdir(path) if obb.endswith(".obb")])
+        path = max([obb in os.listdir(path) if obb.endswith(".obb")])
     with ZipFile(path) as apk:
         with apk.open("assets/aa/catalog.json") as f:
             data = json.load(f)
