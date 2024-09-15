@@ -112,10 +112,11 @@ def save(key, entry):
 def run(path, c):
     global config
     config = c
+    if os.path.isdir(path):
+        path = max([for obb in os.listdir(path) if obb.endswith(".obb")])
     with ZipFile(path) as apk:
         with apk.open("assets/aa/catalog.json") as f:
             data = json.load(f)
-
     type_list = (
     "avatar", "Chart_EZ", "Chart_HD", "Chart_IN", "Chart_AT", "IllustrationBlur", "IllustrationLowRes", "Illustration",
     "music")
