@@ -53,7 +53,7 @@ if len(sys.argv) > 1 and sys.argv[1] == '--phira':
             ill_path = "Illustration/%s.png" % id
             music_path = "music/%s.ogg" % id
                 
-            if not any(os.path.exists(path) for path in {chart_path, music_path, ill_path}):
+            if any(not os.path.exists(path) for path in {chart_path, music_path, ill_path}):
                 print(f'[{levels[level]}]"{id}" does not exist and has been skipped')
                 continue
             
