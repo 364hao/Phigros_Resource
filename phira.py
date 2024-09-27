@@ -49,7 +49,7 @@ for id, info in track(infos.items(), description = "WritingPez..."):
 if len(sys.argv) > 1 and sys.argv[1] == '--phira':
     for id, info in track(infos.items(), description = "WritingPhiraPez..."):
         for level in range(len(info["difficulty"])):
-            chart_path = "Chart_%s/%s.rpe.0.json" % (levels[level], id)
+            chart_path = "Chart_%s/%s.0.rpe.official.json" % (levels[level], id)
             ill_path = "Illustration/%s.png" % id
             music_path = "music/%s.ogg" % id
                 
