@@ -13,10 +13,6 @@
 
 生成适配Phira的pez自制谱文件
 
-3.7.1版本由于テリトリーバトル - ツユ仍未完全删除，运行phira.py时报错
-
-将difficulty.tsv和info.tsv中曲目相关一行删除即可
-
 # 介绍
 
 `gameInformation.py`可从apk获取定数表，tips，收藏品id，头像id，曲id，曲名，曲师，画师，谱师
@@ -50,7 +46,7 @@ Taptap下载的apk
 ```shell
 git clone --depth 1 https://github.com/3035936740/Phigros_Resource
 cd PhigrosLibrary_Resource
-pip3 install -r requirements.txt
+python3 -m pip install UnityPy~=1.10.14 fsb5 rich
 python3 gameInformation.py Phigros.apk
 python3 resource.py Phigros.apk
 ```
@@ -58,7 +54,7 @@ python3 resource.py Phigros.apk
 ```shell
 git clone --depth 1 https://github.com/3035936740/Phigros_Resource
 cd PhigrosLibrary_Resource
-pip3 install -r requirements.txt
+python3 -m pip install UnityPy~=1.10.14 fsb5 rich
 python3 gameInformation.py Phigros.apk
 python3 resource.py Phigros.obb
 ```
