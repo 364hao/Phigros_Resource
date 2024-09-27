@@ -29,19 +29,37 @@ with open("difficulty.tsv", encoding="utf8") as f:
         line = line[:-1].split("\t")
         infos[line[0]]["difficulty"] = line[1:]
 
-for id, info in track(infos.items(), description = "Writing..."):
+for id, info in track(infos.items(), description = "WritingPez..."):
     for level in range(len(info["difficulty"])):
+        chart_path = "Chart_%s/%s.0.json" % (levels[level], id)
+        ill_path = "IllustrationLowRes/%s.png" % id
+        music_path = "music/%s.ogg" % id
+            
+        if not any(os.path.exists(path) for path in {chart_path, music_path, ill_path}):
+            print(f'[{levels[level]}]"{id}" does not exist and has been skipped')
+            continue
+        
         with ZipFile("phira/%s/%s-%s.pez" % (levels[level], id, levels[level]), "x") as pez:
             pez.writestr("info.txt", "#\nName: %s\nSong: %s.ogg\nPicture: %s.png\nChart: %s.json\nLevel: %s Lv.%s\nComposer: %s\nIllustrator: %s\nCharter: %s" % (info["Name"], id, id, id, levels[level], info["difficulty"][level], info["Composer"], info["Illustrator"], info["Chater"][level]))
-            pez.write("Chart_%s/%s.0.json" % (levels[level], id), "%s.json" % id)
-            pez.write("Illustration/%s.png" % id, "%s.png" % id)
-            pez.write("music/%s.ogg" % id, "%s.ogg" % id)
+            
+            pez.write(chart_path, "%s.json" % id)
+            pez.write(ill_path, "%s.png" % id)
+            pez.write(music_path, "%s.ogg" % id)
 
-if len(sys.argv) > 1 and sys.argv[1] == '--rpe':
-    for id, info in track(infos.items(), description = "WritingRpe..."):
+if len(sys.argv) > 1 and sys.argv[1] == '--phira':
+    for id, info in track(infos.items(), description = "WritingPhiraPez..."):
         for level in range(len(info["difficulty"])):
-            with ZipFile("phira/%s/%s-%s-rpe.pez" % (levels[level], id, levels[level]), "x") as pez:
-                pez.writestr("info.txt", "#\nName: %s\nSong: %s.ogg\nPicture: %s.png\nChart: %s.rpe.json\nLevel: %s Lv.%s\nComposer: %s\nIllustrator: %s\nCharter: %s" % (info["Name"], id, id, id, levels[level], info["difficulty"][level], info["Composer"], info["Illustrator"], info["Chater"][level]))
-                pez.write("Chart_%s/%s.0.json" % (levels[level], id), "%s.rpe.json" % id)
-                pez.write("Illustration/%s.png" % id, "%s.png" % id)
-                pez.write("music/%s.ogg" % id, "%s.ogg" % id)
+            chart_path = "Chart_%s/%s.rpe.0.json" % (levels[level], id)
+            ill_path = "Illustration/%s.png" % id
+            music_path = "music/%s.ogg" % id
+                
+            if not any(os.path.exists(path) for path in {chart_path, music_path, ill_path}):
+                print(f'[{levels[level]}]"{id}" does not exist and has been skipped')
+                continue
+            
+            with ZipFile("phira/%s/%s-%s(Phira ver.).pez" % (levels[level], id, levels[level]), "x") as pez:
+                pez.writestr("info.txt", "#\nName: %s\nSong: %s.ogg\nPicture: %s.png\nChart: %s.json\nLevel: %s Lv.%s\nComposer: %s\nIllustrator: %s\nCharter: %s" % (info["Name"], id, id, id, levels[level], info["difficulty"][level], info["Composer"], info["Illustrator"], info["Chater"][level]))
+                
+                pez.write(chart_path, "%s.json" % id)
+                pez.write(ill_path, "%s.png" % id)
+                pez.write(music_path, "%s.ogg" % id)
