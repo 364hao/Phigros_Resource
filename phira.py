@@ -31,17 +31,23 @@ with open("difficulty.tsv", encoding="utf8") as f:
 
 for id, info in track(infos.items(), description = "WritePez"):
     for level in range(len(info["difficulty"])):
-        with ZipFile("phira/%s/%s-%s.pez" % (levels[level], id, levels[level]), "x") as pez:
-            pez.writestr("info.txt", "#\nName: %s\nSong: %s.ogg\nPicture: %s.png\nChart: %s.json\nLevel: %s Lv.%s\nComposer: %s\nIllustrator: %s\nCharter: %s" % (info["Name"], id, id, id, levels[level], info["difficulty"][level], info["Composer"], info["Illustrator"], info["Chater"][level]))
-            pez.write("Chart_%s/%s.0.json" % (levels[level], id), "%s.json" % id)
-            pez.write("Illustration/%s.png" % id, "%s.png" % id)
-            pez.write("music/%s.ogg" % id, "%s.ogg" % id)
+        try:
+            with ZipFile("phira/%s/%s-%s.pez" % (levels[level], id, levels[level]), "x") as pez:
+                pez.writestr("info.txt", "#\nName: %s\nSong: %s.ogg\nPicture: %s.png\nChart: %s.json\nLevel: %s Lv.%s\nComposer: %s\nIllustrator: %s\nCharter: %s" % (info["Name"], id, id, id, levels[level], info["difficulty"][level], info["Composer"], info["Illustrator"], info["Chater"][level]))
+                pez.write("Chart_%s/%s.0.json" % (levels[level], id), "%s.json" % id)
+                pez.write("Illustration/%s.png" % id, "%s.png" % id)
+                pez.write("music/%s.ogg" % id, "%s.ogg" % id)
+        except:
+            pass
 
 if len(sys.argv) > 1 and sys.argv[1] == '--phira':
     for id, info in track(infos.items(), description = "WritePhiraPez"):
         for level in range(len(info["difficulty"])):
-            with ZipFile("phira/%s/%s-%s-rpe.pez" % (levels[level], id, levels[level]), "x") as pez:
-                pez.writestr("info.txt", "#\nName: %s\nSong: %s.ogg\nPicture: %s.png\nChart: %s.json\nLevel: %s Lv.%s\nComposer: %s\nIllustrator: %s\nCharter: %s" % (info["Name"], id, id, id, levels[level], info["difficulty"][level], info["Composer"], info["Illustrator"], info["Chater"][level]))
-                pez.write("Chart_%s/%s.0.json" % (levels[level], id), "%s.rpe.official.json" % id)
-                pez.write("Illustration/%s.png" % id, "%s.png" % id)
-                pez.write("music/%s.ogg" % id, "%s.ogg" % id)
+            try:
+                with ZipFile("phira/%s/%s-%s-rpe.pez" % (levels[level], id, levels[level]), "x") as pez:
+                    pez.writestr("info.txt", "#\nName: %s\nSong: %s.ogg\nPicture: %s.png\nChart: %s.json\nLevel: %s Lv.%s\nComposer: %s\nIllustrator: %s\nCharter: %s" % (info["Name"], id, id, id, levels[level], info["difficulty"][level], info["Composer"], info["Illustrator"], info["Chater"][level]))
+                    pez.write("Chart_%s/%s.0.json" % (levels[level], id), "%s.rpe.official.json" % id)
+                    pez.write("Illustration/%s.png" % id, "%s.png" % id)
+                    pez.write("music/%s.ogg" % id, "%s.ogg" % id)
+            except:
+                pass
